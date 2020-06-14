@@ -1,0 +1,136 @@
+<html>
+  <head>
+    <h3>Chat-Bot</h3>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <script>
+      const dataObj = {
+        validMsg: ["hi", "yes", "no"],
+        currentJourney: -1,
+        journeys: [
+          {
+            topic: "Do you want to learn Addition ?",
+            currentIndex: 0,
+            lessons: ["The sum of 2 and 2 is 4", "The sum of 5 and 5 is 10"],
+          },
+          {
+            topic: "Do you want to learn Subtraction ?",
+            currentIndex: 0,
+            lessons: [
+              "The subtaction of 5 from 10 is 5",
+              "The subtraction of 2 from 5 is 3",
+            ],
+          },
+          {
+            topic: "Do you want to learn Division ?",
+            currentIndex: 0,
+            lessons: ["Division of 4 from 2 is 2", "Division of 8 from 2 is 4"],
+          },
+          {
+            topic: "Do you want to learn Multiplication ?",
+            currentIndex: 0,
+            lessons: [
+              "Multiplication of 4 and 2 is 8",
+              "Multiplication of 4 and 3 is 12",
+            ],
+          },
+        ],
+      };
+      function sendMessage() {
+        const userMsg = document.getElementById("userInput").value;
+        let botMsg = "Sorry I was not able to understand, please retry";
+        if (dataObj.validMsg.indexOf(userMsg.toLowerCase()) !== -1) {
+          if (dataObj.currentJourney === -1) {
+            if (userMsg.toLowerCase() === "hi") {
+              dataObj.currentJourney += 1;
+              botMsg = dataObj.journeys[dataObj.currentJourney].topic;
+            }
+          } else {
+            if (userMsg.toLowerCase() === "yes") {
+              if (
+                dataObj.journeys[dataObj.currentJourney].currentIndex <
+                dataObj.journeys[dataObj.currentJourney].lessons.length
+              ) {
+                botMsg =
+                  dataObj.journeys[dataObj.currentJourney].lessons[
+                    dataObj.journeys[dataObj.currentJourney].currentIndex
+                  ];
+                dataObj.journeys[dataObj.currentJourney].currentIndex += 1;
+              } else {
+                dataObj.journeys[dataObj.currentJourney].currentIndex = 0;
+                dataObj.currentJourney += 1;
+                if (dataObj.currentJourney === dataObj.journeys.length)
+                  dataObj.currentJourney = 0;
+                botMsg =
+                  "All the lessons have been covered " +
+                  dataObj.journeys[dataObj.currentJourney].topic;
+              }
+            } else if (userMsg.toLowerCase() === "no") {
+              if (dataObj.currentJourney === dataObj.journeys.length - 1)
+                dataObj.currentJourney = -1;
+              // dataObj.journeys[dataObj.currentJourney].currentIndex = 0;
+              dataObj.currentJourney += 1;
+              botMsg = dataObj.journeys[dataObj.currentJourney].topic;
+            }
+          }
+        }
+        document.getElementById("userInput").value = "";
+        document.getElementById(
+          "botDiv"
+        ).innerHTML += `<div><h4 style="text-align: right; width: 100%">${userMsg}</h4></div><div><h4 style="text-align: left; width: 100%">${botMsg}</h4></div>`;
+        document.getElementById("botDiv").scrollTop = document.getElementById(
+          "botDiv"
+        ).scrollHeight;
+      }
+    </script>
+  </head>
+  <body>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <div
+      style="
+        height: 40rem;
+        overflow: scroll;
+        background-color: #f5f5f5;
+        width: 50rem;
+        padding: 2rem;
+      "
+      id="botDiv"
+    >
+      <div><h4 style="text-align: left; width: 100%;">Hi !!</h4></div>
+    </div>
+    <input
+      type="text"
+      class="input"
+      placeholder="Enter your message"
+      id="userInput"
+    />
+    <button type="button" class="btn btn-primary" onclick="sendMessage()">
+      Send Message
+    </button>
+  </body>
+</html>
